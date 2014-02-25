@@ -1,4 +1,4 @@
-== SimpleSTR
+# SimpleSTR
 
 (really) simple string parser I'd rather not send myself through email.
 
