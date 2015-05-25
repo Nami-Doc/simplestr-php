@@ -16,6 +16,7 @@ class StringParser {
 
     private $parts = array();
     private $cur = '';
+    private $last;
 
     function __construct($str) {
         $this->str = $str;
@@ -30,6 +31,7 @@ class StringParser {
                 $this->cur .= $c;
                 $this->escaped = false;
             }
+            $this->last = $c;
         }
         $this->doInsert();
 
@@ -37,7 +39,8 @@ class StringParser {
     }
 
     private function doInsert() {
-        if (!$this->cur)
+        // skip consecutive spaces or empty parses
+        if ($this->last == null || $this->last == ' ')
             return;
 
         $this->parts[] = $this->cur;
@@ -47,7 +50,9 @@ class StringParser {
     }
 
     private function parseSpaced($c) {
-        if ($this->quoted_by) {
+        if ($this->escaped) {
+          $this->cur .= $c;
+        } else if ($this->quoted_by) {
             $this->cur .= $c;
         } else {
             $this->doInsert();
